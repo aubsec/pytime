@@ -17,11 +17,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #imports
-import os
-import time
 import sys
 import csv
-import operator
 
 #Parses arguments.  If open(sys.argv[1] fails, generates error and exits.
 #Sorts the CSV by the column 8 and writes to out.csv using csv.writer
@@ -29,11 +26,20 @@ import operator
 #May change the csv.writer to output to stdout.
 def csvParser():
     try:
-        sortedReader = sorted(csv.reader(open(sys.argv[1], 'r'), delimiter='|'), key=operator.itemgetter(8))
-        with open('out.csv', 'w') as outfile:
-            csvoutfile = csv.writer(outfile, delimiter=',')
+        with open(sys.argv[1]) as openFile:
+            reader = csv.reader((x.replace('\0','') for x in openFile), delimiter='|')
+            col = 8
+            filteredRows = filter(lambda x: len(x) > col and x[col] is not None, reader)
+            sortedReader = sorted(filteredRows, key=lambda k: k[col]) 
+            csvout = csv.writer(sys.stdout, delimiter=',')
             for row in sortedReader:
-                csvoutfile.writerow(row)
+                try:
+                    csvout.writerow(row)
+                except:
+                    sys.stderr.write('[!] Error in row')
+                    sys.stderr.write(row)
+                    continue
+     
 
         return 0
     except Exception as errorvalue:
