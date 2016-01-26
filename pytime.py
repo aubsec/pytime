@@ -17,21 +17,36 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #imports
-import sys
+import argparse
 import csv
+import datetime
+import sys
 
-#Parses arguments.  If open(sys.argv[1] fails, generates error and exits.
+#def csvOutPut():
+#    return 0
+#
+
+def dateFormat(datestr):
+    try:
+        return datetime.strptime(datestr, '%Y-%m-%d')
+    except:
+        msg = "Not a valid date: '{0}'.".format(datestr)
+        raise argparse.ArgumentTypeError(msg)
+
 #Sorts the CSV by the column 8 and writes to out.csv using csv.writer
 #Will convert timestamps to ISO before writing to out.csv.
 #May change the csv.writer to output to stdout.
-def csvParser():
+def csvParser(args):
     try:
-        with open(sys.argv[1]) as openFile:
+        with open(args.body) as openFile:
             reader = csv.reader((x.replace('\0','') for x in openFile), delimiter='|')
             col = 8
             filteredRows = filter(lambda x: len(x) > col and x[col] is not None, reader)
             sortedReader = sorted(filteredRows, key=lambda k: k[col]) 
             csvout = csv.writer(sys.stdout, delimiter=',')
+            
+            
+            
             for row in sortedReader:
                 try:
                     csvout.writerow(row)
@@ -50,7 +65,7 @@ def csvParser():
 def exceptionHandler(errorValue, function):
     sys.stderr.write('[!] An error has occured in function ' + function + '\n')
     sys.stderr.write('[!] ' + str(errorValue) + '\n')
-    usage()
+    exit(1)
 
 #Prints usage information and exits
 def usage():
@@ -60,8 +75,16 @@ def usage():
 
 # Main
 def main():
+    parser = argparse.ArgumentParser(description='Generate timeline from body file.')
+    parser.add_argument('-b', '--body', help='Input body file', required=True)
+    parser.add_argument('-s', '--start', help='Input the Start Date', type=dateFormat, required=False)
+    parser.add_argument('-e', '--end', help='Input the End Date', type=dateFormat, required=False)
+    args = parser.parse_args()
+#    print(args.start)
+#    print(args.end)
+
     try:
-        csvParser()
+        csvParser(args)
         sys.stderr.write('[+] Program completed sucessfully\n')
         exit(0)
     except Exception as errorValue:
