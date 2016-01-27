@@ -24,54 +24,101 @@ import sys
 
 def dateFormat(datestr):
     try:
-        return datetime.strptime(datestr, '%Y-%m-%d')
+        return datetime.datetime.strptime(datestr, '%Y-%m-%d').timestamp()
     except:
         msg = "Not a valid date: '{0}'.".format(datestr)
         raise argparse.ArgumentTypeError(msg)
 
 #Sorts the CSV by the column 8 and writes to out.csv using csv.writer
 #Will convert timestamps to ISO before writing to out.csv.
-#May change the csv.writer to output to stdout.
-def csvParser(args):
+def csvSorter(args):
     try:
-        with open(args.body) as openFile:
-            reader = csv.reader((x.replace('\0','') for x in openFile), delimiter='|')
+        with open(args.body) as openfile:
+            reader = csv.reader((x.replace('\0','') for x in openfile), delimiter='|')
             col = 8
-            filteredRows = filter(lambda x: len(x) > col and x[col] is not None, reader)
-            sortedReader = sorted(filteredRows, key=lambda k: k[col]) 
-            csvout = csv.writer(sys.stdout, delimiter=',')
-            for row in sortedReader:
+            filteredrows = filter(lambda x: len(x) > col and x[col] is not None, reader)
+            sortedreader = sorted(filteredrows, key=lambda k: k[col]) 
+            csvOutput(sortedreader, args, col)
+        return 0
+    except Exception as errorvalue:
+        function = 'csvSorter()'
+        exceptionHandler(errorvalue, function)
+
+
+#csvOutput parses the args.start and args.end.
+#Prints rows from sortedreader to stdout until 
+#args.end is reached or until end of sortedreader.
+def csvOutput(sortedreader, args, col):
+    try:
+        csvout = csv.writer(sys.stdout, delimiter=',')
+        if args.start == None and args.end == None:
+            for row in sortedreader:
                 try:
                     csvout.writerow(row)
                 except:
-                    sys.stderr.write('[!] Error in row')
-                    sys.stderr.write(row)
                     continue
-        return 0
+
+        elif args.start != None and args.end == None:
+            for row in sortedreader:
+                try:
+                    if row[col] >= args.start:
+                        csvout.writerow(row)
+                    else:
+                        break
+                    continue
+                except:
+                    continue
+
+        elif args.start != None and args.end != None:
+            for row in sortedreader:
+                try:
+                    if row[col] >= args.start and row[col] < args.end:
+                        csvout.writerow(row)
+                    else:
+                        break
+                    continue
+                except:
+                    continue
+        
+        elif args.start == None and args.end != None:
+            for row in sortedreader:
+                try:
+                    if row[col] <= args.end:
+                        csv.out.writerow(row)
+                    else:
+                        break
+                    continue
+                except:
+                    continue
+
+        else:
+            sys.stderr.write('[!] WTF!')
+            return 1
+    return 0
     except Exception as errorvalue:
-        function = 'csvParser()'
+        function = 'csvOutput()'
         exceptionHandler(errorvalue, function)
 
 #exceptionHandler() collects error codes and prints to screen
-def exceptionHandler(errorValue, function):
+def exceptionHandler(errorvalue, function):
     sys.stderr.write('[!] An error has occured in function ' + function + '\n')
-    sys.stderr.write('[!] ' + str(errorValue) + '\n')
+    sys.stderr.write('[!] ' + str(errorvalue) + '\n')
     exit(1)
 
 # Main
 def main():
     parser = argparse.ArgumentParser(description='Generate timeline from body file.')
-    parser.add_argument('-b', '--body', help='Input body file', required=True)
+    parser.add_argument('-b', '--body', help='Input body file', required=False)
     parser.add_argument('-s', '--start', help='Input the Start Date', type=dateFormat, required=False)
     parser.add_argument('-e', '--end', help='Input the End Date', type=dateFormat, required=False)
     args = parser.parse_args()
     try:
-        csvParser(args)
+        csvSorter(args)
         sys.stderr.write('[+] Program completed sucessfully\n')
         exit(0)
-    except Exception as errorValue:
+    except Exception as errorvalue:
         function = 'main()'
-        exceptionHandler(errorValue, function)
+        exceptionHandler(errorvalue, function)
 
 if __name__=='__main__':
     main()
