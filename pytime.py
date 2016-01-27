@@ -24,19 +24,18 @@ import sys
 
 def dateFormat(datestr):
     try:
-        return datetime.datetime.strptime(datestr, '%Y-%m-%d').timestamp()
+        return int(datetime.datetime.strptime(datestr, '%Y-%m-%d').timestamp())
     except:
         msg = "[!] Not a valid date: '{0}'.".format(datestr)
         raise argparse.ArgumentTypeError(msg)
 
-#Sorts the CSV by the column 8 and writes to out.csv using csv.writer
-#Will convert timestamps to ISO before writing to out.csv.
+#Sorts the CSV by the column 8 
 def csvSorter(args):
     try:
         with open(args.body) as openfile:
             reader = csv.reader((x.replace('\0','') for x in openfile), delimiter='|')
             col = 8
-            filteredrows = filter(lambda x: len(x) > col and x[col] is not None, reader)
+            filteredrows = filter(lambda x: len(x) > col and x[col].isdigit(), reader)
             sortedreader = sorted(filteredrows, key=lambda k: k[col]) 
             csvOutput(sortedreader, args, col)
         return 0
@@ -52,56 +51,42 @@ def csvSorter(args):
 def csvOutput(sortedreader, args, col):
     try:
         csvout = csv.writer(sys.stdout, delimiter=',')
-#If both args.start and args.end have no value.
-#Write every row to stdout.
-        if args.start == None and args.end == None:
+#If args.start does not have a value and args.end does
+#Write every row until args.end to stdout.
+        if str(args.start) == 'None' and str(args.end) != 'None':
+            for row in sortedreader:
+                try:
+                    if float(row[col]) <= args.end:
+                        csvout.writerow(row)
+                except:
+                    continue
+#If args.start does have a value and args.end does not.
+#Write row to stdout starting from args.start until end of file.
+        elif str(args.start) != 'None' and str(args.end) == 'None': 
+            for row in sortedreader:
+                try:
+                    if float(row[col]) >= args.start:
+                        csvout.writerow(row)
+                except:
+                    continue
+#If both args.start and args.end have value.
+#Write row to stdout from args.start and until row[col] is equal to end. 
+        elif str(args.start) != 'None' and str(args.end) != 'None':
+            for row in sortedreader:
+                try:
+                    if float(row[col]) >= args.start and float(row[col]) <= args.end:
+                        csvout.writerow(row)
+                except:
+                    continue
+#Default write everything in file. 
+        else:
             for row in sortedreader:
                 try:
                     csvout.writerow(row)
                 except:
                     continue
-#If args.start does have a value and args.end does not.
-#Write row to stdout starting from args.start until end of file.
-        elif args.start != None and args.end == None: 
-            for row in sortedreader:
-                try:
-                    if row[col] >= args.start:
-                        csvout.writerow(row)
-                    else:
-                        break
-                    continue
-                except:
-                    continue
-#If both args.start and args.end have value.
-#Write row to stdout from args.start and until row[col] is equal to end. 
-        elif args.start != None and args.end != None:
-            for row in sortedreader:
-                try:
-                    if row[col] >= args.start and row[col] <= args.end:
-                        csvout.writerow(row)
-                    else:
-                        break
-                    continue
-                except:
-                    continue
-#If args.start does not have a value and args.end does.  
-#Write row to stdout until row[col] is equal to args.end.
-        elif args.start == None and args.end != None:
-            for row in sortedreader:
-                try:
-                    if row[col] <= args.end:
-                        csv.out.writerow(row)
-                    else:
-                        break
-                    continue
-                except:
-                    continue
-#If something crazy happend. Write this.
-#May modify the if statments to default to write everything after testing. 
-        else:
-            sys.stderr.write('[!] WTF!')
-            return 1
-    return 0
+            
+        return 0
     except Exception as errorvalue:
         function = 'csvOutput()'
         exceptionHandler(errorvalue, function)
@@ -115,10 +100,13 @@ def exceptionHandler(errorvalue, function):
 # Main
 def main():
     parser = argparse.ArgumentParser(description='Generate timeline from body file.')
-    parser.add_argument('-b', '--body', help='Input body file', required=False)
+    parser.add_argument('-b', '--body', help='Input body file', required=True)
     parser.add_argument('-s', '--start', help='Input the Start Date', type=dateFormat, required=False)
     parser.add_argument('-e', '--end', help='Input the End Date', type=dateFormat, required=False)
     args = parser.parse_args()
+    #sys.stderr.write(str(args.start) + '\n')
+    #sys.stderr.write(str(args.end) + '\n')
+    
     try:
         csvSorter(args)
         sys.stderr.write('[+] Program completed sucessfully\n')
