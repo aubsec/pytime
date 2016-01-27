@@ -26,7 +26,7 @@ def dateFormat(datestr):
     try:
         return datetime.datetime.strptime(datestr, '%Y-%m-%d').timestamp()
     except:
-        msg = "Not a valid date: '{0}'.".format(datestr)
+        msg = "[!] Not a valid date: '{0}'.".format(datestr)
         raise argparse.ArgumentTypeError(msg)
 
 #Sorts the CSV by the column 8 and writes to out.csv using csv.writer
@@ -48,17 +48,21 @@ def csvSorter(args):
 #csvOutput parses the args.start and args.end.
 #Prints rows from sortedreader to stdout until 
 #args.end is reached or until end of sortedreader.
+#! TD - Modify the csvout.writerow(row) to modify the format of the timestamp to ISO.
 def csvOutput(sortedreader, args, col):
     try:
         csvout = csv.writer(sys.stdout, delimiter=',')
+#If both args.start and args.end have no value.
+#Write every row to stdout.
         if args.start == None and args.end == None:
             for row in sortedreader:
                 try:
                     csvout.writerow(row)
                 except:
                     continue
-
-        elif args.start != None and args.end == None:
+#If args.start does have a value and args.end does not.
+#Write row to stdout starting from args.start until end of file.
+        elif args.start != None and args.end == None: 
             for row in sortedreader:
                 try:
                     if row[col] >= args.start:
@@ -68,18 +72,20 @@ def csvOutput(sortedreader, args, col):
                     continue
                 except:
                     continue
-
+#If both args.start and args.end have value.
+#Write row to stdout from args.start and until row[col] is equal to end. 
         elif args.start != None and args.end != None:
             for row in sortedreader:
                 try:
-                    if row[col] >= args.start and row[col] < args.end:
+                    if row[col] >= args.start and row[col] <= args.end:
                         csvout.writerow(row)
                     else:
                         break
                     continue
                 except:
                     continue
-        
+#If args.start does not have a value and args.end does.  
+#Write row to stdout until row[col] is equal to args.end.
         elif args.start == None and args.end != None:
             for row in sortedreader:
                 try:
@@ -90,7 +96,8 @@ def csvOutput(sortedreader, args, col):
                     continue
                 except:
                     continue
-
+#If something crazy happend. Write this.
+#May modify the if statments to default to write everything after testing. 
         else:
             sys.stderr.write('[!] WTF!')
             return 1
