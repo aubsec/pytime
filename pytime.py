@@ -22,10 +22,6 @@ import csv
 import datetime
 import sys
 
-#def csvOutPut():
-#    return 0
-#
-
 def dateFormat(datestr):
     try:
         return datetime.strptime(datestr, '%Y-%m-%d')
@@ -44,9 +40,6 @@ def csvParser(args):
             filteredRows = filter(lambda x: len(x) > col and x[col] is not None, reader)
             sortedReader = sorted(filteredRows, key=lambda k: k[col]) 
             csvout = csv.writer(sys.stdout, delimiter=',')
-            
-            
-            
             for row in sortedReader:
                 try:
                     csvout.writerow(row)
@@ -54,8 +47,6 @@ def csvParser(args):
                     sys.stderr.write('[!] Error in row')
                     sys.stderr.write(row)
                     continue
-     
-
         return 0
     except Exception as errorvalue:
         function = 'csvParser()'
@@ -67,12 +58,6 @@ def exceptionHandler(errorValue, function):
     sys.stderr.write('[!] ' + str(errorValue) + '\n')
     exit(1)
 
-#Prints usage information and exits
-def usage():
-    sys.stderr.write('[!] pytime.py requires only one argument, the source Body file\n[!] Output in CSV is to the standard out\n')
-    sys.stderr.write('example:  pytime.py source.body\n')
-    exit(1)
-
 # Main
 def main():
     parser = argparse.ArgumentParser(description='Generate timeline from body file.')
@@ -80,9 +65,6 @@ def main():
     parser.add_argument('-s', '--start', help='Input the Start Date', type=dateFormat, required=False)
     parser.add_argument('-e', '--end', help='Input the End Date', type=dateFormat, required=False)
     args = parser.parse_args()
-#    print(args.start)
-#    print(args.end)
-
     try:
         csvParser(args)
         sys.stderr.write('[+] Program completed sucessfully\n')
