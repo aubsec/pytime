@@ -29,6 +29,18 @@ def dateFormat(datestr):
         msg = "[!] Not a valid date: '{0}'.".format(datestr)
         raise argparse.ArgumentTypeError(msg)
 
+def dateConvert(row):
+    print(row)
+    for i in row:
+        print(i)
+        #if i >= 7 and i <= 10:
+        #if i == 7:
+        i = datetime.datetime.fromtimestamp(int(i)).strftime('%Y-%m-%dT%H:%H:%S.%f')
+        #else:
+        #    continue
+        print(i)
+    return '0'  
+
 #Sorts the CSV by the column 8 
 def csvSorter(args):
     try:
@@ -82,7 +94,7 @@ def csvOutput(sortedreader, args, col):
         else:
             for row in sortedreader:
                 try:
-                    csvout.writerow(row)
+                    csvout.writerow(dateConvert(row))
                 except:
                     continue
             
