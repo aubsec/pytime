@@ -32,7 +32,7 @@ def dateFormat(datestr):
 def dateConvert(row):
     for i in range(len(row)):
         if i >= 7 and i <= 10:
-            row[i] = datetime.datetime.fromtimestamp(int(row[i])).strftime('%Y-%m-%dT%H:%H:%S.%f')
+            row[i] = datetime.datetime.fromtimestamp(int(row[i])).strftime('%Y-%m-%dT%H:%M:%S')
         else:
             continue
     return row  
