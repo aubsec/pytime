@@ -30,16 +30,12 @@ def dateFormat(datestr):
         raise argparse.ArgumentTypeError(msg)
 
 def dateConvert(row):
-    print(row)
-    for i in row:
-        print(i)
-        #if i >= 7 and i <= 10:
-        #if i == 7:
-        i = datetime.datetime.fromtimestamp(int(i)).strftime('%Y-%m-%dT%H:%H:%S.%f')
-        #else:
-        #    continue
-        print(i)
-    return '0'  
+    for i in range(len(row)):
+        if i >= 7 and i <= 10:
+            row[i] = datetime.datetime.fromtimestamp(int(row[i])).strftime('%Y-%m-%dT%H:%H:%S.%f')
+        else:
+            continue
+    return row  
 
 #Sorts the CSV by the column 8 
 def csvSorter(args):
@@ -63,6 +59,7 @@ def csvSorter(args):
 def csvOutput(sortedreader, args, col):
     try:
         csvout = csv.writer(sys.stdout, delimiter=',')
+        csvout.writerow(['MD5','name','inode','mode_as_string','UID','GID','size','atime','mtime','ctime','crtime'])
 #If args.start does not have a value and args.end does
 #Write every row until args.end to stdout.
         if str(args.start) == 'None' and str(args.end) != 'None':
