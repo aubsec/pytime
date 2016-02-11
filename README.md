@@ -28,12 +28,13 @@ specified, only dates between the start and endl will be parsed (Example 4).
 <br>Example 2:  pytime -b bodyfile.body -s 2016-01-01
 <br>Example 3:  pytime -b bodyfile.body -e 2016-02-01
 <br>Example 4:  pytime -b bodyfile.body -s 2016-01-01 -e 2016-02-01
-<br>
-<br>optional arguments:
-  <br>-h, --help                 show this help message and exit
-  <br>-b BODY, --body BODY      Input body file
-  <br>-s START, --start START   Optional. Input the Start Date in format "YYYY-MM-DD"
-  <br>-e END, --end END             Optional. Input the End Date in format "YYYY-MM-DD
+
+Arguments:
+|-h, --help |show this help message and exit|
+|---        |---    |
+|-b, --body |Input body file                             |
+|-s, --start|Optional.  Start date in format "YYYY-MM-DD"|
+|-e, --end  |Optional.  End date in format "YYYY-MM-DD"  |
 
 ## Contributing
 
@@ -45,10 +46,10 @@ specified, only dates between the start and endl will be parsed (Example 4).
 
 ## Credits
 
-Matthew Aubert
+<p>Matthew Aubert
 -@aubsec
 -aubsec@gmail.com
--github.com/aubsec
+-github.com/aubsec</p>
 
 ## License
 
