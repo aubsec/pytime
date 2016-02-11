@@ -16,10 +16,10 @@ pytime takes up to three arguments.  The argument -b must be used to identify
 the body file to be parsed.  Optionally the -s and -e arguments can be used to
 specify a start and end date using the date format of "YYYY-MM-DD".
 
-|Argument|Description|
-|---|---|
+|Argument   |Description|
+|---        |---|
 |-h, --help |show this help message and exit|
-|-b, --body |Input body file |
+|-b, --body |Input body file|
 |-s, --start|Optional.  Start date in format "YYYY-MM-DD"|
 |-e, --end  |Optional.  End date in format "YYYY-MM-DD"  |
 
@@ -37,15 +37,6 @@ Examples
 3. pytime -b bodyfile.body -e 2016-02-01
 4. pytime -b bodyfile.body -s 2016-01-01 -e 2016-02-01
 
-
-## Contributing
-
-1. Fork it!
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request :D
-
 ## Credits
 
 Matthew Aubert
@@ -55,18 +46,19 @@ Matthew Aubert
 
 ## License
 
-<p>pytime.py Used for timeline creation in digital investigations.</p>
-<p>Copyright (C) 2016 Matthew Aubert<p>
+pytime.py Used for timeline creation in digital investigations.
 
-<p>This program is free software: you can redistribute it and/or modify
+Copyright (C) 2016 Matthew Aubert
+
+This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.</p>
+(at your option) any later version.
 
-<p>This program is distributed in the hope that it will be useful,
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.</p>
+GNU General Public License for more details.
 
-<p>You should have received a copy of the GNU General Public License
-along with this program.  If not, see http://www.gnu.org/licenses/.</p>
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see http://www.gnu.org/licenses/.
