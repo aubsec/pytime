@@ -12,9 +12,9 @@ and from volatility.
 
 ## Usage
 
-<p>pytime takes up to three arguments.  The argument -b must be used to identify
+pytime takes up to three arguments.  The argument -b must be used to identify
 the body file to be parsed.  Optionally the -s and -e arguments can be used to
-specify a start and end date using the date format of "YYYY-MM-DD". </p>
+specify a start and end date using the date format of "YYYY-MM-DD".>
 
 |Argument|Description|
 |---|---|
@@ -23,7 +23,7 @@ specify a start and end date using the date format of "YYYY-MM-DD". </p>
 |-s, --start|Optional.  Start date in format "YYYY-MM-DD"|
 |-e, --end  |Optional.  End date in format "YYYY-MM-DD"  |
 
-<p>A Start [-s] date and End [-e] date can be specified in format "YYYY-MM-DD".  
+A Start [-s] date and End [-e] date can be specified in format "YYYY-MM-DD".  
 
   *If no date arguments are specified, the program will parse all data in the body file (Example 1).  
 
@@ -32,7 +32,6 @@ specify a start and end date using the date format of "YYYY-MM-DD". </p>
   *If the end date is specified, it will parse all data from the beginning of the file to the specified end date (Example 3).  
 
   *If both a start and end date is specified, only dates between the start and endl will be parsed (Example 4).
-</p>
 
 Examples
 1.  pytime -b bodyfile.body
