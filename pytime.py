@@ -66,33 +66,40 @@ def csvOutput(sortedreader, args, col):
         csvout.writerow(['MD5','name','inode','mode_as_string','UID','GID','size','atime','mtime','ctime','crtime'])
 #If args.start does not have a value and args.end does
 #Write every row until args.end to stdout.
-        if str(args.start) == 'None' and str(args.end) != 'None':
+        if args.start == None and args.end != None:
+            sys.stderr.write('[+] End defined \n')
             for row in sortedreader:
                 try:
-                    if float(row[col]) <= args.end:
-                        csvout.writerow(row)
+                    row8 = int(row[8])
+                    if args.end >= row8:
+                        csvout.writerow(dateConvert(row))
                 except:
                     continue
 #If args.start does have a value and args.end does not.
 #Write row to stdout starting from args.start until end of file.
-        elif str(args.start) != 'None' and str(args.end) == 'None': 
+        elif args.start != None and args.end == None: 
+            sys.stderr.write('[+] Start defined \n')
             for row in sortedreader:
                 try:
-                    if float(row[col]) >= args.start:
-                        csvout.writerow(row)
+                    row8 = int(row[8])
+                    if args.start <= row8:
+                        csvout.writerow(dateConvert(row))
                 except:
                     continue
 #If both args.start and args.end have value.
 #Write row to stdout from args.start and until row[col] is equal to end. 
-        elif str(args.start) != 'None' and str(args.end) != 'None':
+        elif args.start != None and args.end != None:
+            sys.stderr.write('[+] Start and End defined \n')
             for row in sortedreader:
                 try:
-                    if float(row[col]) >= args.start and float(row[col]) <= args.end:
-                        csvout.writerow(row)
+                    row8 = int(row[8])
+                    if args.start <= row8 and args.end >= row8:
+                        csvout.writerow(dateConvert(row))
                 except:
                     continue
 #Default write everything in file. 
         else:
+            sys.stderr.write('[+] Default out \n')
             for row in sortedreader:
                 try:
                     csvout.writerow(dateConvert(row))
