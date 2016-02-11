@@ -1,13 +1,13 @@
 # pytime
 ###https://github.comi/aubsec/pytime.git
 
-<p>The purpose of this Python project is to replicate functions of the mactime perl 
+The purpose of this Python project is to replicate functions of the mactime perl 
 script in Python-3 while modifying some of the output.  It also personally serves 
-as practice in programming in Python-3 and utilizing vim.</p> 
+as practice in programming in Python-3 and utilizing vim.
 
-<p>pytime generates timelines from a body file.  Body files can be generated from
+pytime generates timelines from a body file.  Body files can be generated from
 a number of other applications, most commonly from the TSK fls, log2timeline,
-and from volatility. </p>
+and from volatility. 
 
 
 ## Usage
