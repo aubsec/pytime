@@ -23,16 +23,17 @@ end of the file (Example 2).  If the end date is specified, it will parse all da
 beginning of the file to the specified end date (Example 3).  If both a start and end date is 
 specified, only dates between the start and endl will be parsed (Example 4).
 </p>
-<br>
-<br>Example 1:  pytime -b bodyfile.body
-<br>Example 2:  pytime -b bodyfile.body -s 2016-01-01
-<br>Example 3:  pytime -b bodyfile.body -e 2016-02-01
-<br>Example 4:  pytime -b bodyfile.body -s 2016-01-01 -e 2016-02-01
 
-Arguments:
+Examples
+1:  pytime -b bodyfile.body
+2:  pytime -b bodyfile.body -s 2016-01-01
+3:  pytime -b bodyfile.body -e 2016-02-01
+4:  pytime -b bodyfile.body -s 2016-01-01 -e 2016-02-01
+
+|Argument|Description|
+|---|---|
 |-h, --help |show this help message and exit|
-|---        |---    |
-|-b, --body |Input body file                             |
+|-b, --body |Input body file |
 |-s, --start|Optional.  Start date in format "YYYY-MM-DD"|
 |-e, --end  |Optional.  End date in format "YYYY-MM-DD"  |
 
